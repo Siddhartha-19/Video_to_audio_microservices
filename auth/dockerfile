@@ -1,0 +1,32 @@
+FROM python:3.11.9-slim-bullseye
+
+RUN apt-get update && \
+    apt-get install -y default-libmysqlclient-dev \
+                       build-essential \
+                       libssl-dev \
+                       libffi-dev \
+                       python3-dev \
+                       pkg-config \
+                       && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements.txt file into the container
+COPY ./requirements.txt /app
+
+# Set environment variables for mysqlclient
+ENV MYSQLCLIENT_CFLAGS="-I/usr/include/mysql"
+ENV MYSQLCLIENT_LDFLAGS="-L/usr/lib/x86_64-linux-gnu -lmysqlclient"
+
+RUN pip install --upgrade pip
+
+RUN pip install --no-cache-dir --verbose -r requirements.txt
+
+
+COPY . /app
+
+EXPOSE 5000
+
+CMD ["python3", "server.py"]
