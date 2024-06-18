@@ -11,8 +11,11 @@ Key Features
     Database Per Service: MySQL databases for data isolation and scalability.
     JWT Authentication: Secure API Gateway with JWT tokens for user authentication and authorization.
     Firebase Storage: Efficient storage and retrieval of video and audio files.
-    RabbitMQ Message Queues: Asynchronous communication between microservices ('video_mp4' and 'audio_mp4').
+    RabbitMQ Message Queues: Asynchronous communication between services (video_mp4 for Gateway <-> Converter Service, audio_mp3 for Converter Service <-> Notification Service).
     Real-time Notifications: Notification Service for delivering download URLs to users after conversion completion.
+    
+<img width="1023" alt="Screenshot 2024-06-17 at 10 34 30 PM" src="https://github.com/Siddhartha-19/Video_to_audio_microservices/assets/68334395/af97d2b0-cbf9-43f0-b767-cf450c93e17d">
+
 
 Technology Stack
 
@@ -25,5 +28,6 @@ Workflow
 
     User Authentication: Users log in through the API Gateway, which verifies credentials using JWT tokens.
     Video Upload: Authenticated users upload videos to Firebase Storage via the Gateway Service.
-    Conversion Process: The Converter Service reads video files from Firebase Storage, converts them to audio files, and stores them back in Firebase Storage.
+    Conversion Process: The Converter Service reads video files from Firebase Storage (video_mp4), converts them to audio files, and stores them back in Firebase        Storage. It then sends the audio download URLs to the Notification Service via RabbitMQ (audio_mp3).
     Notification: Upon successful conversion, the Notification Service sends real-time notifications containing download URLs to users.
+
